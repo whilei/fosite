@@ -50,18 +50,6 @@ func (c *Fosite) NewAuthorizeRequest(ctx context.Context, r *http.Request) (Auth
 	}
 	request.Client = client
 
-	if len(request.Form.Get("request")) > 0 {
-		return request, errors.WithStack(ErrRequestNotSupported)
-	}
-
-	if len(request.Form.Get("request_uri")) > 0 {
-		return request, errors.WithStack(ErrRequestURINotSupported)
-	}
-
-	if len(request.Form.Get("registration")) > 0 {
-		return request, errors.WithStack(ErrRegistrationNotSupported)
-	}
-
 	scope := removeEmpty(strings.Split(r.Form.Get("scope"), " "))
 	for _, permission := range scope {
 		if !c.ScopeStrategy(client.GetScopes(), permission) {
@@ -103,6 +91,18 @@ func (c *Fosite) NewAuthorizeRequest(ctx context.Context, r *http.Request) (Auth
 		return request, errors.WithStack(ErrInvalidState.WithDebug(fmt.Sprintf("State length must at least be %d characters long", MinParameterEntropy)))
 	}
 	request.State = state
+
+	if len(request.Form.Get("request")) > 0 {
+		return request, errors.WithStack(ErrRequestNotSupported)
+	}
+
+	if len(request.Form.Get("request_uri")) > 0 {
+		return request, errors.WithStack(ErrRequestURINotSupported)
+	}
+
+	if len(request.Form.Get("registration")) > 0 {
+		return request, errors.WithStack(ErrRegistrationNotSupported)
+	}
 
 	// Remove empty items from arrays
 	request.SetRequestedScopes(scope)
