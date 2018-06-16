@@ -77,6 +77,14 @@ func (f *Fosite) NewAccessRequest(ctx context.Context, r *http.Request, session 
 		return accessRequest, errors.WithStack(ErrInvalidRequest.WithDebug("No grant type given"))
 	}
 
+	if len(accessRequest.Form.Get("request")) > 0 {
+		return accessRequest, errors.WithStack(ErrRequestNotSupported)
+	}
+
+	if len(accessRequest.Form.Get("registration")) > 0 {
+		return accessRequest, errors.WithStack(ErrRegistrationNotSupported)
+	}
+
 	// Decode client_id and client_secret which should be in "application/x-www-form-urlencoded" format.
 	clientID, clientSecret, err := clientCredentialsFromRequest(r)
 	if err != nil {

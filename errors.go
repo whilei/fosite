@@ -178,6 +178,16 @@ var (
 		Name:        errConsentRequired,
 		Code:        http.StatusBadRequest,
 	}
+	ErrRequestNotSupported = &RFC6749Error{
+		Description: "The OP does not support use of the request parameter",
+		Name:        errRequestNotSupportedName,
+		Code:        http.StatusBadRequest,
+	}
+	ErrRegistrationNotSupported = &RFC6749Error{
+		Description: "The OP does not support use of the registration parameter",
+		Name:        errRegistrationNotSupportedName,
+		Code:        http.StatusBadRequest,
+	}
 )
 
 const (
@@ -209,6 +219,8 @@ const (
 	errAuthorizaionCodeInactiveName = "authorization_code_inactive"
 	errUnknownErrorName             = "error"
 	errRevokationClientMismatchName = "revokation_client_mismatch"
+	errRequestNotSupportedName      = "request_not_supported"
+	errRegistrationNotSupportedName = "registration_not_supported"
 )
 
 func ErrorToRFC6749Error(err error) *RFC6749Error {
